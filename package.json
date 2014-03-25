@@ -1,0 +1,14 @@
+{
+  "name": "pseudopseudo",
+  "version": "0.0.0",
+  "description": "create dummy css selector",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "suisho",
+  "license": "ISC",
+  "devDependencies": {
+    "specificity": "^0.1.3"
+  }
+}
