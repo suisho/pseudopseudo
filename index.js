@@ -1,3 +1,4 @@
+var defaults = require("defaults")
 var GLYPH_REPLACEMENT_PLEFIX = "glyglyglygly"
 var GLYPH_ELEMENT_REPLACEMENTS = {
   "@" : "namespace",
@@ -39,8 +40,7 @@ function replaceGlyphFunc(str){
 
 function restoreGlyphFunc(str){
   str = restoreNot(str)
-console.log(str)
-  
+
   for(var glyph in GLYPH_ELEMENT_REPLACEMENTS){
     var replaced = replaceAsElement(glyph)
     str = str.split(replaced).join(glyph)
@@ -52,8 +52,19 @@ console.log(str)
   return str
 }
 
+var PseudoPseudo = function(opts){
+  var options = defaults(opts, {
+    prefix : "pseudo_",
+  })
+  this.prefix = options.prefix
+}
+PseudoPseudo.prototype.replace = function(selector){
+  return replaceGlyphFunc(selector)
+}
+PseudoPseudo.prototype.restore = function(selector){
+  return restoreGlyphFunc(selector)
+}
 
-module.exports = {
-  replace : replaceGlyphFunc,
-  restore : restoreGlyphFunc
+module.exports = function(opts){
+  return new PseudoPseudo(opts)
 }
