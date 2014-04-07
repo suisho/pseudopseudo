@@ -61,6 +61,6 @@ PseudoPseudo.prototype.restore = function(str){
 }
 
 module.exports = function(opts){
-
   return new PseudoPseudo(opts)
 }
+module.exports.PseudoPseudo = PseudoPseudo
