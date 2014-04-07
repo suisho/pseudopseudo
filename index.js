@@ -31,7 +31,7 @@ PseudoPseudo.prototype.replaceAsElement = function(glyph){
 }
 
 PseudoPseudo.prototype.replaceAsClass = function(glyph){
-  return "." + this.prefix + "__" + this.classReplacement[glyph] + "___";
+  return "." + this.replaceAsElement(glyph)
 }
 
 PseudoPseudo.prototype.replace = function(str){
