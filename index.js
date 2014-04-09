@@ -2,7 +2,7 @@ var defaults = require("defaults")
 
 var PseudoPseudo = function(opts){
   var options = defaults(opts, {
-    prefix : "pseudo",
+    prefix : "dummypseudodummypseudo",
   })
   this.prefix = options.prefix
 
@@ -17,7 +17,6 @@ PseudoPseudo.prototype.classReplacement = {
   ":" : "pseudo",
 }
 
-
 PseudoPseudo.prototype.replaceNot = function(selector){
   return selector.replace(/:not\((.+)\)/g, "__NOT__$1")
 }
@@ -26,12 +25,16 @@ PseudoPseudo.prototype.restoreNot = function(selector){
   return selector.replace(/__NOT__(\S+)+/g, ":not($1)")
 }
 
-PseudoPseudo.prototype.replaceAsElement = function(glyph){
-  return this.prefix + "__" + this.elementReplacement[glyph] + "___"
+PseudoPseudo.prototype._replace = function(glyph, replacements){
+  return this.prefix + "__" + replacements[glyph] + "___"
+}
+
+PseudoPseudo.prototype.replaceAsElement = function(glyph, replacements){
+  return this._replace(glyph, this.elementReplacement)
 }
 
 PseudoPseudo.prototype.replaceAsClass = function(glyph){
-  return "." + this.replaceAsElement(glyph)
+  return "." + this._replace(glyph, this.classReplacement)
 }
 
 PseudoPseudo.prototype.replace = function(str){
