@@ -1,65 +1,75 @@
 var defaults = require("defaults")
-
+var invert = require("invert-hash")
 var PseudoPseudo = function(opts){
   var options = defaults(opts, {
-    prefix : "dummypseudodummypseudo",
+    prefix : "pseudo",
   })
   this.prefix = options.prefix
 
 }
-
 PseudoPseudo.prototype.elementReplacement = {
   "@" : "namespace",
   "(" : "lc",
-  ")" : "r",
+  ")" : "rc",
 }
 PseudoPseudo.prototype.classReplacement = {
-  ":" : "pseudo",
+  ":" : "colon",
 }
 
 PseudoPseudo.prototype.replaceNot = function(selector){
-  return selector.replace(/:not\((.+)\)/g, "__NOT__$1")
+  return selector.replace(/\:(not)\((.+)\)/g, "__fnc__$1__$2")
 }
-
 PseudoPseudo.prototype.restoreNot = function(selector){
-  return selector.replace(/__NOT__(\S+)+/g, ":not($1)")
+  return selector.replace(/__fnc__(not)__(\S+)/g, ":$1($2)")
 }
 
-PseudoPseudo.prototype._replace = function(glyph, replacements){
-  return this.prefix + "__" + replacements[glyph] + "___"
+PseudoPseudo.prototype.replaceFunc = function(selector){
+  return selector.replace(/\:(.+)\((.+)\)/g, ".__fnc__$1__$2")
 }
 
-PseudoPseudo.prototype.replaceAsElement = function(glyph, replacements){
-  return this._replace(glyph, this.elementReplacement)
+PseudoPseudo.prototype.restoreFunc = function(selector){
+  return selector.replace(/\.__fnc__(.+)__(\S+)/g, ":$1($2)")
 }
 
-PseudoPseudo.prototype.replaceAsClass = function(glyph){
-  return "." + this._replace(glyph, this.classReplacement)
+
+PseudoPseudo.prototype._replace = function(key, array){
+  return this.prefix + "__" + array[key] + "__"
+}
+PseudoPseudo.prototype.replaceAsElement = function(key){
+  return this._replace(key, this.elementReplacement)
 }
 
+PseudoPseudo.prototype.replaceAsClass = function(key){
+  return"." + this._replace(key, this.classReplacement)
+}
+
+PseudoPseudo.prototype.replaceHash = function(str, hash, fn){
+  for(var key in hash){
+    var replaced = fn.call(this, key)
+    str = str.split(key).join(replaced)
+  }
+  return str
+}
+PseudoPseudo.prototype.restoreHash = function(str, hash, fn){
+  for(var key in hash){
+    var restored = fn.call(this, key)
+    str = str.split(restored).join(key)
+  }
+  return str
+}
 PseudoPseudo.prototype.replace = function(str){
   str = this.replaceNot(str)
-  for(var glyph in this.elementReplacement){
-    var replaced = this.replaceAsElement(glyph)
-    str = str.split(glyph).join(replaced)
-  }
-  for(var glyph in this.classReplacement){
-    var replaced = this.replaceAsClass(glyph)
-    str = str.split(glyph).join(replaced)
-  }
+  str = this.replaceFunc(str)
+  str = this.replaceHash(str, this.elementReplacement, this.replaceAsElement)
+  str = this.replaceHash(str, this.classReplacement, this.replaceAsClass)
   return str
 }
 PseudoPseudo.prototype.restore = function(str){
   str = this.restoreNot(str)
+  str = this.restoreFunc(str)
 
-  for(var glyph in this.elementReplacement){
-    var restored = this.replaceAsElement(glyph)
-    str = str.split(restored).join(glyph)
-  }
-  for(var glyph in this.classReplacement){
-    var restored = this.replaceAsClass(glyph)
-    str = str.split(restored).join(glyph)
-  }
+  str = this.restoreHash(str, this.elementReplacement, this.replaceAsElement)
+  str = this.restoreHash(str, this.classReplacement, this.replaceAsClass)
   return str
 }
 
