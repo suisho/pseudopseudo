@@ -1,5 +1,5 @@
 var specificity = require('specificity')
-var pseudoEmulator = require('../lib/pseudo.js')
+var pseudoEmulator = require('../index.js')
 var assert = require('assert')
 
 // unit test

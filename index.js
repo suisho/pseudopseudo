@@ -1,12 +1,12 @@
 var defaults = require("defaults")
-var invert = require("invert-hash")
+//var invert = require("invert-hash")
 var PseudoPseudo = function(opts){
   var options = defaults(opts, {
     prefix : "pseudo",
   })
   this.prefix = options.prefix
-
 }
+
 PseudoPseudo.prototype.elementReplacement = {
   "@" : "namespace",
   "(" : "lc",
