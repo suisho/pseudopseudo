@@ -15,6 +15,16 @@ PseudoPseudo.prototype.elementReplacement = {
 PseudoPseudo.prototype.classReplacement = {
   ":" : "colon",
 }
+PseudoPseudo.prototype.dataReplacement = {
+  "+" : "plus",
+}
+// f**k
+PseudoPseudo.prototype.replaceData = function(selector){
+  return selector.replace(/\((.+)\+(.+)\)/g, "__val__$1__plus__$2")
+}
+PseudoPseudo.prototype.restoreData = function(selector){
+  return selector.replace(/__val__(.+)__plus__(\S+)/g, "($1+$2)")
+}
 
 PseudoPseudo.prototype.replaceNot = function(selector){
   return selector.replace(/\:(not)\((.+)\)/g, "__fnc__$1__$2")
@@ -24,10 +34,12 @@ PseudoPseudo.prototype.restoreNot = function(selector){
 }
 
 PseudoPseudo.prototype.replaceFunc = function(selector){
+  selector = this.replaceData(selector)
   return selector.replace(/\:(.+)\((.+)\)/g, ".__fnc__$1__$2")
 }
 
 PseudoPseudo.prototype.restoreFunc = function(selector){
+  selector = this.restoreData(selector)
   return selector.replace(/\.__fnc__(.+)__(\S+)/g, ":$1($2)")
 }
 
@@ -60,8 +72,11 @@ PseudoPseudo.prototype.restoreHash = function(str, hash, fn){
 PseudoPseudo.prototype.replace = function(str){
   str = this.replaceNot(str)
   str = this.replaceFunc(str)
+
   str = this.replaceHash(str, this.elementReplacement, this.replaceAsElement)
+
   str = this.replaceHash(str, this.classReplacement, this.replaceAsClass)
+
   return str
 }
 PseudoPseudo.prototype.restore = function(str){

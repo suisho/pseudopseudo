@@ -29,7 +29,7 @@ var conbined = [
   'div:not(.outer) .inner',
   'audio:not([controls])',
   'tr:nth-child(3) ',
-  //'tr:nth-child(2n+1) ', // wait specificity update
+  'tr:nth-child(2n+1) ', 
 ]
 conbined.forEach(function(selector){
   describe(selector, function(){
