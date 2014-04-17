@@ -1,4 +1,5 @@
 var defaults = require("defaults")
+var calculate = require("specificity").calculate
 //var invert = require("invert-hash")
 var PseudoPseudo = function(opts){
   var options = defaults(opts, {
@@ -7,13 +8,17 @@ var PseudoPseudo = function(opts){
   this.prefix = options.prefix
 }
 
+
+
 PseudoPseudo.prototype.elementReplacement = {
   "@" : "namespace",
-  "(" : "lc",
-  ")" : "rc",
 }
 PseudoPseudo.prototype.classReplacement = {
   ":" : "colon",
+}
+PseudoPseudo.prototype.replaceNot = function(funcName, selector){
+  var regexp = new RegExp(":(" +funcName + ")\((.+)\)")
+  return selector.replace(/\:(not)\((.+)\)/g, "__fnc__$1__$2")
 }
 
 PseudoPseudo.prototype.replaceNot = function(selector){
@@ -58,6 +63,7 @@ PseudoPseudo.prototype.restoreHash = function(str, hash, fn){
   return str
 }
 PseudoPseudo.prototype.replace = function(str){
+
   str = this.replaceNot(str)
   str = this.replaceFunc(str)
   str = this.replaceHash(str, this.elementReplacement, this.replaceAsElement)
@@ -72,6 +78,8 @@ PseudoPseudo.prototype.restore = function(str){
   str = this.restoreHash(str, this.classReplacement, this.replaceAsClass)
   return str
 }
+
+
 
 module.exports = function(opts){
   return new PseudoPseudo(opts)

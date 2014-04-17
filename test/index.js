@@ -59,3 +59,5 @@ conbined.forEach(function(selector){
 
   })
 })
+// error pattern
+//[".foo:bar .boo"]
