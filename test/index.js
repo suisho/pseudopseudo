@@ -29,7 +29,8 @@ var conbined = [
   'div:not(.outer) .inner',
   'audio:not([controls])',
   'tr:nth-child(3) ',
-  'tr:nth-child(2n+1) ', 
+  'tr:nth-child(2n+1) ',
+  'a+b:nth-child(2n+1)',
 ]
 conbined.forEach(function(selector){
   describe(selector, function(){
