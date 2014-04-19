@@ -36,7 +36,7 @@ suite("parser", function(){
     csp.parse(selector())
   })
   bench("chunkwhat", function(){
-    chunkwhat(selector())[0].stringify()
+    chunkwhat(selector())[0]//.stringify()
   })
 })
 suite("extra", function(){
@@ -45,6 +45,6 @@ suite("extra", function(){
     p = CSSwhat(selector())
   })
   bench("chunkwhat", function(){
-    chunkwhat(p)[0].stringify()
+    chunkwhat(p)[0]//.stringify()
   })
 })
