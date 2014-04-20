@@ -20,6 +20,11 @@ describe("unit test", function(){
   it("nth", function(){
     assertion("tr:nth-child(3)","tr.__fnc__nth-child__3")
   })
+  it("nth-plus", function(){
+    // TODO
+    //assertion("tr:nth-child(2n+1)","tr.__fnc__nth-child__2n__plus__1")
+  })
+
 })
 
 // combined test

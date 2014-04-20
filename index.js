@@ -74,7 +74,6 @@ PseudoPseudo.prototype.replace = function(str){
   str = this.replaceFunc(str)
 
   str = this.replaceHash(str, this.elementReplacement, this.replaceAsElement)
-
   str = this.replaceHash(str, this.classReplacement, this.replaceAsClass)
 
   return str
