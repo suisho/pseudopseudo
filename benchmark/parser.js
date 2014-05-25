@@ -3,6 +3,8 @@ var CSSwhat = require("CSSwhat")
 var slick = require("slick")
 var specificity = require("specificity")
 var chunkwhat = require("chunkwhat")
+var cssparsimon = require("cssparsimon")
+
 
 var CssSelectorParser = require('css-selector-parser').CssSelectorParser
 var csp = new CssSelectorParser();
@@ -35,8 +37,11 @@ suite("parser", function(){
   bench("csp", function(){
     csp.parse(selector())
   })
-  bench("chunkwhat", function(){
+  /*bench("chunkwhat", function(){
     chunkwhat(selector())[0].stringify()
+  })*/
+  bench("cssparsimon", function(){
+    cssparsimon(selector())
   })
 })
 suite("extra", function(){
@@ -44,7 +49,7 @@ suite("extra", function(){
   before(function(){
     p = CSSwhat(selector())
   })
-  bench("chunkwhat", function(){
+  /*bench("chunkwhat", function(){
     chunkwhat(p)[0].stringify()
-  })
+  })*/
 })
